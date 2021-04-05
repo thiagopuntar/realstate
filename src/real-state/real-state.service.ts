@@ -17,10 +17,17 @@ export class RealStateService {
     return new RealStatePrice(price);
   }
 
-  async getUnitPrice(zipCode: string): Promise<number> {
-    const url = `${process.env.BASE_PRICE_URL}?zipCode=${zipCode}`;
-    const response = await this.httpService.get(url).toPromise();
-    const { value } = response.data;
-    return parseFloat(value);
+  async getUnitPrice(zipCode: string): Promise<any> {
+    try {
+      const url = `${process.env.BASE_PRICE_URL}?zipCode=${zipCode}`;
+      console.log(url);
+      const response = await this.httpService.get(url);
+      response.subscribe((x) => console.log(x.data));
+      return response;
+      // const { value } = response.data;
+      // return parseFloat(value);
+    } catch (error) {
+      console.log('error ', error.message);
+    }
   }
 }
