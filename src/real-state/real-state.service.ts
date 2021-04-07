@@ -7,7 +7,7 @@ export class RealStateService {
   constructor(private httpService: HttpService) {}
 
   async calculateRealStatePrice(filter: GetRealStatePriceDto) {
-    const unitPrice = await this.getUnitPrice(filter.zipCode);
+    const unitPrice = await this.getUnitPrice();
 
     if (!unitPrice) {
       throw new NotFoundException('No unit price found for zipCode.');
@@ -17,10 +17,10 @@ export class RealStateService {
     return new RealStatePrice(price);
   }
 
-  async getUnitPrice(zipCode: string): Promise<number> {
-    const url = `${process.env.BASE_PRICE_URL}?zipCode=${zipCode}`;
+  async getUnitPrice(): Promise<number> {
+    const url = `${process.env.BASE_PRICE_URL}`;
     const response = await this.httpService.get(url).toPromise();
-    const { value = 15 } = response.data;
+    const { value } = response.data;
     return value;
   }
 }
